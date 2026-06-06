@@ -1,6 +1,9 @@
 package net.eli.tutorialmod;
 
 import com.mojang.logging.LogUtils;
+import net.eli.tutorialmod.block.ModBlocks;
+import net.eli.tutorialmod.item.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -28,6 +31,9 @@ public class TutorialMod {
     public TutorialMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         // Register ourselves for server and other game events we are interested in
@@ -44,7 +50,14 @@ public class TutorialMod {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if(event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
+            event.accept(ModItems.SLICED_CAKE);
+            event.accept(ModItems.SOUL);
+            event.accept(ModItems.ENERGY_DRINK);
+        }
+        if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(ModBlocks.STOVE);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
